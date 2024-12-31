@@ -6,7 +6,7 @@ from aiogram.types.callback_query import CallbackQuery
 import asyncio
 
 
-API_TOKEN = "yOUR BOT TOKEN"
+API_TOKEN = "7840981516:AAGLqHiGM1A-95akL23g4tN_GXjyhMbIqXA"
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
@@ -21,7 +21,21 @@ async def show_menu(message: types.Message):
     ])
     await message.answer('O\'zingizga yoqqan bo\'limni tanlang', reply_markup=markup)
 # Unit 1 uchun handler
+@dp.callback_query(F.data == "unit1")
+async def proces_unit1(callback: CallbackQuery):
+    await callback.answer('Siz unit 1 ni tanladingiz azizim!')
+    await callback.answer('Siz unit 2 ni tanladingiz azizim!')
+# Unit 2 uchun callback handler
+@dp.callback_query(F.data == "unit2")
+async def process_unit2(callback: CallbackQuery):
+    await callback.answer("Siz Unit 2 ni tanladingiz.")
+    await callback.message.answer("Unit 2 bo‘limi haqida ma'lumot.")
 
+# Botni ishga tushurish
+async def main():
+    await dp.start_polling(bot)
+if __name__  == '__main':
+    asyncio.run(main())
 
 
 
