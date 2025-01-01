@@ -15,23 +15,22 @@ dp = Dispatcher()
 async def show_menu(message: types.Message):
     # Tugmachalar yaratamiz
     markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Unit 1", callback_data="unit1")],
-        [InlineKeyboardButton(text="Unit 2", callback_data="unit2")]
+        [InlineKeyboardButton(text='Unit 1', callback_data='unit1')],
+        [InlineKeyboardButton(text='Unit 2', callback_data='unit2')]
     ])
+    await message.answer("O'zingizga yoqqan bo'limni tanlang:", reply_markup=markup)
 
-    await message.answer("Iltimos, bo‘limni tanlang:", reply_markup=markup)
-
-# Unit 1 uchun callback handler
+# Unit 1 uchun handler
 @dp.callback_query(F.data == "unit1")
 async def process_unit1(callback: CallbackQuery):
-    await callback.answer("Siz Unit 1 ni tanladingiz.")
-    await callback.message.answer("Unit 1 bo‘limi haqida ma'lumot.")
+    await callback.answer("Siz Unit 1 ni tanladingiz!")
+    await callback.message.answer("Unit 1 haqida qo'shimcha ma'lumot.")
 
-# Unit 2 uchun callback handler
+# Unit 2 uchun handler
 @dp.callback_query(F.data == "unit2")
 async def process_unit2(callback: CallbackQuery):
-    await callback.answer("Siz Unit 2 ni tanladingiz.")
-    await callback.message.answer("Unit 2 bo‘limi haqida ma'lumot.")
+    await callback.answer("Siz Unit 2 ni tanladingiz!")
+    await callback.message.answer("Unit 2 haqida qo'shimcha ma'lumot.")
 
 # Botni ishga tushirish
 async def main():
