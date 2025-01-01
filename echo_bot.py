@@ -22,6 +22,25 @@ async def help(message: types.Message):
 async def help1(message: types.Message):
     await message.answer("Salom sizga qanday olaman?")
 
+@dp.message(lambda message: message.text.lower() == "salom")
+async def greet_user(message: types.Message):
+    await message.reply("Salom! Qanday yordam bera olaman?")
+
+RESPONSES = {
+    "salom": "Salom! Qanday yordam bera olaman?",
+    "hi": "Hi! How can I help you?",
+    "hello": "Hello! Need assistance?",
+    "assalomu alaykum": "Va alaykum assalom! Nima yordam kerak?",
+    "nima gap": "Tinchlik o'zizdachi?",
+    "qalaysiz": "Yaxshiman o'zingizchi"
+}
+
+@dp.message(lambda message: message.text.lower() in RESPONSES)
+async def respond_to_greeting(message: types.Message):
+    await message.reply(RESPONSES[message.text.lower()])
+
+
+
 #Foydalanuvchiga javob beruvchi handler
 @dp.message()
 async def echo(message: types.Message):
