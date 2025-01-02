@@ -3,19 +3,22 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
 import asyncio
 
-BOT_TOKEN = "SIZNING_BOT_TOKENINGIZ"
+BOT_TOKEN = "7840981516:AAGLqHiGM1A-95akL23g4tN_GXjyhMbIqXA"  # O'zingizning tokeningizni kiriting
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Tugmachalarni yaratamiz
-reply_markup = ReplyKeyboardMarkup(resize_keyboard=True)
-button1 = KeyboardButton("Salom")
-button2 = KeyboardButton("Yordam")
-button3 = KeyboardButton("Qo'shimcha ma'lumot")
-reply_markup.add(button1, button2, button3)
+# Tugmachalarni to'g'ri formatda yaratamiz
+reply_markup = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="Salom")],
+        [KeyboardButton(text="Yordam")],
+        [KeyboardButton(text="Qo'shimcha ma'lumot")],
+    ],
+    resize_keyboard=True,  # Klaviatura o'lchamini moslashtirish
+)
 
-@dp.message(Command(commands=['start']))
+@dp.message(Command("start"))
 async def send_welcome(message: types.Message):
     await message.reply("Xush kelibsiz! Tugmalardan birini tanlang:", reply_markup=reply_markup)
 
@@ -31,9 +34,9 @@ async def provide_help(message: types.Message):
 async def additional_info(message: types.Message):
     await message.reply("Bu bot Aiogram asosida ishlaydi va Telegram uchun mo‘ljallangan.")
 
-# Botni ishga tushirish uchun asyncio.run ishlatamiz
+# Botni ishga tushirish
 async def main():
-    await dp.start_polling()
+    await dp.start_polling(bot)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())

@@ -3,12 +3,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
 import asyncio
 
-from pyexpat.errors import messages
-
-from empty import reply_markup, button1
-from main import API_TOKEN
-
-API_TOKEN = "YOUR BOT TOKEN"
+API_TOKEN = "7840981516:AAGLqHiGM1A-95akL23g4tN_GXjyhMbIqXA"
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
@@ -28,10 +23,16 @@ async  def welcome_send(message: types.Message):
 async def say_hello(message: types.Message):
     await message.reply("Salom qanday yordam bera olaman")
 
-@dp.message(Command(command=["Yordam"]))
+@dp.message(Command(commands=["Yordam"]))
 async def probide_help(message: types.Message):
-    await message.reply_poll("Sizga qanday yordam bera olaman")
+    await message.reply("Sizga qanday yordam bera olaman")
 
-
-
+@dp.message(Command(commands=['Qoshimcha malumot']))
+async def information(message: types.Message):
+    await message.reply("Bu bot Shavkatjon Mirzavaliyev tomonidan tuzuldi")
+#Botni ishga tushurish
+async def main():
+    await dp.start_polling()
+if __name__ == "__main__":
+    asyncio.run(main())
 
