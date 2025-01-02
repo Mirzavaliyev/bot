@@ -1,42 +1,43 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram import Bot, Dispatcher, Router, types
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.filters import Command
 import asyncio
 
-BOT_TOKEN = "7840981516:AAGLqHiGM1A-95akL23g4tN_GXjyhMbIqXA"  # O'zingizning tokeningizni kiriting
+# Bot tokeni
+API_TOKEN = "7840981516:AAGUstjxmAy935OAc-rS9nHuc2L0M0Ky6mg"
 
-bot = Bot(token=BOT_TOKEN)
+# Bot va Router obyektlari
+bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+router = Router()
 
-# Tugmachalarni to'g'ri formatda yaratamiz
-reply_markup = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="Salom")],
-        [KeyboardButton(text="Yordam")],
-        [KeyboardButton(text="Qo'shimcha ma'lumot")],
-    ],
-    resize_keyboard=True,  # Klaviatura o'lchamini moslashtirish
-)
+# Inline tugmachalarni yaratamiz
+inline_markup = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Biz haqimizda", callback_data="about_us")],
+    [InlineKeyboardButton(text="Veb-sayt", url="https://example.com")],
+    [InlineKeyboardButton(text="Telegram kanal", url="https://t.me/online_english_learners")]
+])
 
-@dp.message(Command("start"))
-async def send_welcome(message: types.Message):
-    await message.reply("Xush kelibsiz! Tugmalardan birini tanlang:", reply_markup=reply_markup)
-
-@dp.message(lambda message: message.text == "Salom")
+@message(Command(commands=["start"]))
 async def say_hello(message: types.Message):
-    await message.reply("Salom! Qanday yordam bera olaman?")
+    await message.answer("Nima hizmat aka", reply_markup=inline_markup)
 
-@dp.message(lambda message: message.text == "Yordam")
-async def provide_help(message: types.Message):
-    await message.reply("Men sizga yordam bera olaman. Savollaringizni yuboring!")
 
-@dp.message(lambda message: message.text == "Qo'shimcha ma'lumot")
-async def additional_info(message: types.Message):
-    await message.reply("Bu bot Aiogram asosida ishlaydi va Telegram uchun mo‘ljallangan.")
+@router.message(Command(commands=['menu']))
+async def show_menu(message: types.Message):
+    await message.reply("Quyidagilardan birini tanlang:", reply_markup=inline_markup)
+
+@router.callback_query(lambda callback: callback.data == "about_us")
+async def about_us(callback: types.CallbackQuery):
+    await callback.answer()
+    await bot.send_message(callback.from_user.id, "Biz Telegram botlar yaratamiz!")
+
+
 
 # Botni ishga tushirish
 async def main():
+    dp.include_router(router)
     await dp.start_polling(bot)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(main())
