@@ -1,37 +1,41 @@
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
 import asyncio
 
-#Bot token
-TOKEN = "YOUR TOKEN"
+BOT_TOKEN = "7938805460:AAFi1Y-4PMpRmzednEqPwf4Va7ZCfrEtq_Q"
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Start handler
-@dp.message(Command(commands="start"))
-async def send_welcome(message: Message):
-    await message.answer("Salom botga hush kelibsiz")
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Birinchi tugma", callback_data="button1")],
-            [InlineKeyboardButton(text="Ikkinchi tugma", callback_data="button2")]
-        ]
+# Reply Keyboardni yaratamiz
+@dp.message(Command(commands=["start"]))
+async def start_handler(message: Message):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Salom")],
+            [KeyboardButton(text="Qanday ahvolda?")],
+            [KeyboardButton(text="Rahmat!")],
+        ],
+        resize_keyboard=True  # Tugmalarni ekranga moslash uchun
     )
-    await message.answer()
-@dp.callback_query()
-async def callback_query(callback: CallbackQuery):
-    if callback.data == "button1":
-        await callback.message.answer("Siz 1 ni tanladingiz ")
-    elif callback.data == "button2":
-        await callback.message.answer("Siz ikkini taladiz")
-    await callback.answer()
+    await message.answer("Quyidagi tugmalardan birini tanlang:", reply_markup=keyboard)
+
+# Tugma bosilganda javob
+@dp.message()
+async def reply_handler(message: Message):
+    if message.text == "Salom":
+        await message.answer("Va alaykum assalom!")
+    elif message.text == "Qanday ahvolda?":
+        await message.answer("Yaxshi, sizda-chi?")
+    elif message.text == "Rahmat!":
+        await message.answer("Arzimaydi! 😊")
+    else:
+        await message.answer("Meni tushunmadim. Tugmalardan birini tanlang.")
 
 async def main():
-    print("Bot ishga tushyapti")
+    print("Bot ishga tushmoqda...")
     await dp.start_polling(bot)
+
 if __name__ == "__main__":
     asyncio.run(main())
-
-
